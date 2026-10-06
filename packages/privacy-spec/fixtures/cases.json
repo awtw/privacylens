@@ -1,0 +1,15 @@
+[
+  { "name": "email", "text": "聯絡信箱 john.doe@example.com 謝謝", "expected": [{ "type": "EMAIL", "text": "john.doe@example.com" }] },
+  { "name": "tw mobile", "text": "手機 0912-345-678", "expected": [{ "type": "PHONE", "text": "0912-345-678" }] },
+  { "name": "tw mobile intl", "text": "Call +886 912 345 678 now", "expected": [{ "type": "PHONE", "text": "+886 912 345 678" }] },
+  { "name": "tw landline", "text": "電話 (02) 2345-6789", "expected": [{ "type": "PHONE", "text": "(02) 2345-6789" }] },
+  { "name": "tw id valid", "text": "身分證 A123456789", "expected": [{ "type": "TW_NATIONAL_ID", "text": "A123456789" }] },
+  { "name": "tw id bad checksum", "text": "編號 A123456788", "expected": [] },
+  { "name": "credit card valid", "text": "卡號 4111 1111 1111 1111", "expected": [{ "type": "CREDIT_CARD", "text": "4111 1111 1111 1111" }] },
+  { "name": "credit card bad luhn", "text": "序號 4111 1111 1111 1112", "expected": [] },
+  { "name": "bank account with keyword", "text": "匯款帳號：012-345678-9012", "expected": [{ "type": "BANK_ACCOUNT", "text": "012-345678-9012" }] },
+  { "name": "digits without keyword are not bank accounts", "text": "訂單 1234567890123", "expected": [] },
+  { "name": "url", "text": "see https://example.com/a?b=1 ok", "expected": [{ "type": "URL", "text": "https://example.com/a?b=1" }] },
+  { "name": "ip", "text": "server 192.168.1.10 up", "expected": [{ "type": "IP_ADDRESS", "text": "192.168.1.10" }] },
+  { "name": "no pii", "text": "今天天氣很好，我們去散步。", "expected": [] }
+]

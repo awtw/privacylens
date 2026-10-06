@@ -1,0 +1,16 @@
+{
+  "name": "privacylens",
+  "private": true,
+  "type": "module",
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "dev": "npm run dev -w @privacylens/web",
+    "build": "npm run build -w @privacylens/web",
+    "test": "vitest run",
+    "typecheck": "tsc -p packages/privacy-spec --noEmit && tsc -p apps/web --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
