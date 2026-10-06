@@ -4,3 +4,4 @@ export * from './rules';
 export * from './risk';
 export * from './geometry';
 export * from './pipeline';
+export * from './metadata';

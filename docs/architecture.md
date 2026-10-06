@@ -53,7 +53,7 @@ Input (Image/Screenshot/PDF/Text)
 
 ## 7. 部署與離線
 Web 為靜態站；模型於 `public/models`，容量變大後移至 R2/CDN。快取完成後以 PWA + Service Worker 離線使用。對外措辭：「模型下載完成後，推論完全在本機執行」。WebGPU 優先、必須保留 WASM fallback。
-> PoC 現況：tesseract.js 首次執行會從 CDN 下載語言資料；Phase 3 改為自行託管（`langPath`）並納入 Service Worker 快取。
+> 現況：OCR 資源已自行託管於 `/ocr`，並由 Service Worker 預先快取；僅 Google Fonts 仍為外部資源（離線退回系統字型）。
 
 ## 8. iOS（無 Developer Program）
 Personal Team + 自動簽署 + 唯一 Bundle ID。**不依賴**：Push、Sign in with Apple、CloudKit、Apple Pay、IAP。Share Extension 若受免費簽署限制則延後。

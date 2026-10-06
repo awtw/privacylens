@@ -6,6 +6,9 @@ export type EntityType =
   | 'BANK_ACCOUNT'
   | 'URL'
   | 'IP_ADDRESS'
+  | 'ID_NUMBER'
+  | 'USERNAME'
+  | 'CUSTOM'
   | 'PERSON'
   | 'ADDRESS'
   | 'ORGANIZATION'
@@ -16,7 +19,7 @@ export type EntityType =
   | 'GPS'
   | 'DEVICE_INFO';
 
-export type EntitySource = 'regex' | 'ner' | 'vision' | 'metadata';
+export type EntitySource = 'regex' | 'ner' | 'vision' | 'metadata' | 'manual';
 
 export type RiskLevel = 'low' | 'medium' | 'high' | 'critical';
 
