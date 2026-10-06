@@ -1,54 +1,35 @@
 import SwiftUI
 
-/// 8plus identity: International Klein Blue field, Pantone Orange accent, white text, serif headlines.
+/// Native look first: system backgrounds, SF Symbols, Dynamic Type. 8plus orange is only the tint/accent.
 enum Theme {
-    static let blue = Color(red: 0, green: 0.184, blue: 0.655)      // #002FA7
-    static let orange = Color(red: 1, green: 0.314, blue: 0)        // #FE5000
-    static let night = Color(red: 0.039, green: 0.055, blue: 0.102) // #0A0E1A
-    static let glass = Color.white.opacity(0.08)
-    static let hairline = Color.white.opacity(0.14)
-    static let muted = Color.white.opacity(0.7)
-    static func serif(_ size: CGFloat) -> Font { .system(size: size, weight: .semibold, design: .serif) }
-    static let mono = Font.system(size: 11, weight: .regular, design: .monospaced)
+    static let orange = Color(red: 1, green: 0.314, blue: 0) // #FE5000
+    static let blue = Color(red: 0, green: 0.184, blue: 0.655) // #002FA7
 }
 
-/// The 8plus "%" mark: small circle, thick slash, large circle (orange).
+/// PrivacyLens mark: scan frame, text lines, one line redacted by a slanted orange bar (slant echoes 8plus "%").
+/// Ink adapts: Klein blue on light backgrounds, white on dark.
 struct LogoMark: View {
     var size: CGFloat = 28
+    @Environment(\.colorScheme) private var scheme
     var body: some View {
         Canvas { ctx, sz in
             let s = sz.width / 100
-            ctx.fill(Path(ellipseIn: CGRect(x: 14 * s, y: 11 * s, width: 36 * s, height: 36 * s)), with: .color(.white))
-            var slash = Path()
-            slash.move(to: CGPoint(x: 53 * s, y: 9 * s)); slash.addLine(to: CGPoint(x: 68 * s, y: 9 * s))
-            slash.addLine(to: CGPoint(x: 36 * s, y: 91 * s)); slash.addLine(to: CGPoint(x: 21 * s, y: 91 * s)); slash.closeSubpath()
-            ctx.fill(slash, with: .color(.white))
-            ctx.fill(Path(ellipseIn: CGRect(x: 42 * s, y: 36 * s, width: 56 * s, height: 56 * s)), with: .color(Theme.orange))
+            let ink = GraphicsContext.Shading.color(scheme == .dark ? .white : Theme.blue)
+            var frame = Path()
+            // four corner brackets
+            frame.move(to: CGPoint(x: 14 * s, y: 34 * s)); frame.addLine(to: CGPoint(x: 14 * s, y: 14 * s)); frame.addLine(to: CGPoint(x: 34 * s, y: 14 * s))
+            frame.move(to: CGPoint(x: 66 * s, y: 14 * s)); frame.addLine(to: CGPoint(x: 86 * s, y: 14 * s)); frame.addLine(to: CGPoint(x: 86 * s, y: 34 * s))
+            frame.move(to: CGPoint(x: 86 * s, y: 66 * s)); frame.addLine(to: CGPoint(x: 86 * s, y: 86 * s)); frame.addLine(to: CGPoint(x: 66 * s, y: 86 * s))
+            frame.move(to: CGPoint(x: 34 * s, y: 86 * s)); frame.addLine(to: CGPoint(x: 14 * s, y: 86 * s)); frame.addLine(to: CGPoint(x: 14 * s, y: 66 * s))
+            ctx.stroke(frame, with: ink, style: StrokeStyle(lineWidth: 7 * s, lineCap: .square))
+            ctx.fill(Path(roundedRect: CGRect(x: 28 * s, y: 30 * s, width: 44 * s, height: 7 * s), cornerRadius: 3.5 * s), with: ink)
+            ctx.fill(Path(roundedRect: CGRect(x: 28 * s, y: 64 * s, width: 30 * s, height: 7 * s), cornerRadius: 3.5 * s), with: ink)
+            var bar = Path()
+            bar.move(to: CGPoint(x: 30 * s, y: 44 * s)); bar.addLine(to: CGPoint(x: 78 * s, y: 44 * s))
+            bar.addLine(to: CGPoint(x: 74 * s, y: 57 * s)); bar.addLine(to: CGPoint(x: 26 * s, y: 57 * s)); bar.closeSubpath()
+            ctx.fill(bar, with: .color(Theme.orange))
         }
         .frame(width: size, height: size)
         .accessibilityLabel("PrivacyLens")
-    }
-}
-
-struct GlassCard<Content: View>: View {
-    @ViewBuilder var content: Content
-    var body: some View {
-        content
-            .padding(16)
-            .background(Theme.glass, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 22, style: .continuous).stroke(Theme.hairline))
-    }
-}
-
-struct PillButtonStyle: ButtonStyle {
-    var filled = true
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(.system(size: 15, weight: .medium))
-            .foregroundStyle(.white)
-            .padding(.vertical, 13).frame(maxWidth: .infinity)
-            .background(filled ? Theme.orange : .clear, in: Capsule())
-            .overlay(Capsule().stroke(filled ? .clear : Color.white.opacity(0.4)))
-            .opacity(configuration.isPressed ? 0.8 : 1)
     }
 }

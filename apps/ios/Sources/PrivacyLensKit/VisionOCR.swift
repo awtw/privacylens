@@ -17,17 +17,36 @@ public enum VisionOCR {
             let a = $0.boundingBox, b = $1.boundingBox
             return abs(a.maxY - b.maxY) > 0.01 ? a.maxY > b.maxY : a.minX < b.minX
         }
-        var words: [OcrWord] = []
-        for (line, obs) in observations.enumerated() {
+        // (observation, token) pairs first; line ids are assigned afterwards from real geometry.
+        var raw: [(obs: Int, text: String, box: BBox)] = []
+        for (o, obs) in observations.enumerated() {
             guard let cand = obs.topCandidates(1).first else { continue }
             for range in tokenRanges(cand.string) {
                 let token = String(cand.string[range])
                 guard !token.isEmpty, let box = try? cand.boundingBox(for: range)?.boundingBox else { continue }
                 // Vision: bottom-left origin → top-left origin.
-                words.append(OcrWord(text: token,
-                                     bbox: BBox(x: box.minX, y: 1 - box.maxY, w: box.width, h: box.height),
-                                     line: line))
+                raw.append((o, token, BBox(x: box.minX, y: 1 - box.maxY, w: box.width, h: box.height)))
             }
+        }
+        // Sanity: a token far taller than typical text is a bad box (e.g. a range spanning wrapped lines). Drop it
+        // rather than let a giant rectangle redact half the image.
+        let heights = raw.map(\.box.h).sorted()
+        let medianH = heights.isEmpty ? 0 : heights[heights.count / 2]
+        raw = raw.filter { medianH == 0 || $0.box.h <= medianH * 3 }
+
+        // One observation can wrap over several visual lines: split it so entity boxes never union across lines.
+        var words: [OcrWord] = []
+        var lineId = -1
+        var prevObs = -1
+        var lineCenter = 0.0
+        for r in raw {
+            let cy = r.box.y + r.box.h / 2
+            if r.obs != prevObs || abs(cy - lineCenter) > max(r.box.h, medianH) * 0.6 {
+                lineId += 1
+                lineCenter = cy
+                prevObs = r.obs
+            }
+            words.append(OcrWord(text: r.text, bbox: r.box, line: lineId))
         }
         return words
     }

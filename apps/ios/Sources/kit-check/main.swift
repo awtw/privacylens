@@ -1,5 +1,6 @@
 import CoreGraphics
 import Foundation
+import ImageIO
 @testable import PrivacyLensKit
 
 // Framework-free checks: shared fixtures + pipeline, geometry, redaction, Vision smoke test.
@@ -14,6 +15,23 @@ func close(_ a: Double, _ b: Double) -> Bool { abs(a - b) < 1e-9 }
 struct Case: Decodable {
     struct Exp: Decodable { let type: String; let text: String }
     let name: String; let text: String; let expected: [Exp]
+}
+
+
+// Debug: `swift run kit-check --image path.png` prints Vision words and detected entities.
+if let i = CommandLine.arguments.firstIndex(of: "--image"), i + 1 < CommandLine.arguments.count {
+    let path = CommandLine.arguments[i + 1]
+    guard let src = CGImageSourceCreateWithURL(URL(fileURLWithPath: path) as CFURL, nil), let img = CGImageSourceCreateImageAtIndex(src, 0, nil) else {
+        print("cannot load \(path)"); exit(2)
+    }
+    print("image \(img.width)x\(img.height)")
+    let words = try VisionOCR.recognize(img)
+    for w in words { print(String(format: "W line%-2d x%.3f y%.3f w%.3f h%.3f  %@", w.line, w.bbox.x, w.bbox.y, w.bbox.w, w.bbox.h, w.text)) }
+    for e in Pipeline.detect(words: words) {
+        let b = e.bbox!
+        print(String(format: "E %@ %.2f x%.3f y%.3f w%.3f h%.3f  %@", e.type.rawValue, e.confidence, b.x, b.y, b.w, b.h, e.text))
+    }
+    exit(0)
 }
 
 // 1. Shared fixtures — identical to the TypeScript suite.

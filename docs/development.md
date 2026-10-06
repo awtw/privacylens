@@ -50,7 +50,7 @@ npm run build        # 建置 Web 靜態站（apps/web/dist）
 
 ## Phase 4：iOS（apps/ios）
 - 已寫完：`PrivacyLensKit`（Rules/Pipeline/Risk/Geometry 逐項移植、Vision OCR、Core Image 遮罩）與 SwiftUI App、XcodeGen 設定。細節與安裝步驟見 `apps/ios/README.md`。
-- 驗證：`npm run test:ios`（`swift run kit-check`）以與 TypeScript 相同的 fixtures 驗證；App 以 iOS 模擬器 SDK 型別檢查通過。**尚未在 Xcode 建置或實機執行**（本機 Xcode 授權未同意，需 sudo）。
+- 驗證：`npm run test:ios`（`swift run kit-check`）以與 TypeScript 相同的 fixtures 驗證；`xcodebuild` 已能成功建置（模擬器與實機 SDK，未簽署）。**尚未實際執行**：本機尚未安裝 iOS 模擬器 runtime，也未連接 iPhone。
 - 修改規則時：先改 `packages/privacy-spec`（含 fixtures），再同步改 `Rules.swift`，兩邊測試都要過。
 
 ## 已知限制（目前實作）

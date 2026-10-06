@@ -6,7 +6,8 @@ let onProgress: ((p: number, label: string) => void) | null = null;
 
 // All OCR assets are self-hosted under /ocr (see scripts/copy-ocr-assets.mjs) so nothing is fetched from a CDN
 // and the service worker can cache them for offline use.
-const BASE = import.meta.env.BASE_URL;
+// Must be ABSOLUTE: tesseract.js starts its worker from a blob: URL, where importScripts('/relative') is invalid.
+const BASE = new URL(import.meta.env.BASE_URL, document.baseURI).href;
 function getWorker(): Promise<Worker> {
   workerPromise ??= (async () => {
     const w = await createWorker(['chi_tra', 'eng'], 1, {
