@@ -48,6 +48,11 @@ npm run build        # 建置 Web 靜態站（apps/web/dist）
 - NER（可選、預設關閉）：導覽列下方開關。`Xenova/distilbert-base-multilingual-cased-ner-hrl`（q8，約 135MB）以 transformers.js 在 Web Worker 執行，只有模型權重會下載（首次後由瀏覽器快取），文字不離開本機。結果以文字形式回傳，`pipeline.ts` 以「忽略空白」的方式對回 OCR 文字再映射成 bbox；NER 的 PERSON/ORG/LOC 優先於中英文人名啟發式。已用無頭 Chrome 驗證（Tim Cook／林志玲／Alice Johnson 等無標籤人名皆抓到）。
 - 文字模式：貼上文字 → 偵測 → 以 █ 或 [類型] 遮罩 → 複製。
 
+## Phase 4：iOS（apps/ios）
+- 已寫完：`PrivacyLensKit`（Rules/Pipeline/Risk/Geometry 逐項移植、Vision OCR、Core Image 遮罩）與 SwiftUI App、XcodeGen 設定。細節與安裝步驟見 `apps/ios/README.md`。
+- 驗證：`npm run test:ios`（`swift run kit-check`）以與 TypeScript 相同的 fixtures 驗證；App 以 iOS 模擬器 SDK 型別檢查通過。**尚未在 Xcode 建置或實機執行**（本機 Xcode 授權未同意，需 sudo）。
+- 修改規則時：先改 `packages/privacy-spec`（含 fixtures），再同步改 `Rules.swift`，兩邊測試都要過。
+
 ## 已知限制（目前實作）
 - 輸入為圖片、PDF 與純文字；僅 Regex/啟發式偵測（無 NER/Vision/Metadata）。
 - 手動框選尚不支援移動/縮放既有框，只能刪除後重畫。

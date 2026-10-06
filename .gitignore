@@ -5,3 +5,6 @@ dist
 .vite
 coverage
 apps/web/public/ocr
+apps/ios/.build
+apps/ios/PrivacyLens.xcodeproj
+apps/ios/App/Info.plist

@@ -73,8 +73,8 @@ privacylens/
 |---|---|---|
 | 1 | Web PoC：拖放 → OCR → bbox → Regex → Redact All → 匯出 | ✅ 完成 |
 | 2 | Privacy Core：Schema、Risk、Regex、Pipeline、標準測試資料 | ✅ 完成（可持續擴充規則） |
-| 3 | Web MVP：PDF/Text、NER、PWA、Offline、Privacy Report、完整 redaction UI、公開部署 | ⏳ |
-| 4 | iOS Local Build：Vision OCR + Regex + Core Image（Personal Team） | ⏳ |
+| 3 | Web MVP：PDF/Text、NER、PWA、Offline、Privacy Report、完整 redaction UI、公開部署 | 🟡 除 Privacy Report 與公開部署外皆完成 |
+| 4 | iOS Local Build：Vision OCR + Regex + Core Image（Personal Team） | 🟡 程式完成、核心已驗證；待 Xcode 建置與實機測試 |
 | 5 | iOS AI：Core ML NER、Face、Barcode、Metadata、Camera | ⏳ |
 | 6 | 是否加入 Developer Program 的決策點 | — |
 

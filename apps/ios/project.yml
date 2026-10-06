@@ -1,0 +1,30 @@
+name: PrivacyLens
+options:
+  bundleIdPrefix: com.example   # change to something unique to you (free Personal Team needs a unique ID)
+  deploymentTarget:
+    iOS: "16.0"
+packages:
+  PrivacyLensKit:
+    path: .
+targets:
+  PrivacyLens:
+    type: application
+    platform: iOS
+    sources: [App]
+    dependencies:
+      - package: PrivacyLensKit
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: PrivacyLens
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        NSPhotoLibraryAddUsageDescription: PrivacyLens 需要權限把遮罩後的圖片存到相簿。
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.privacylens
+        SWIFT_VERSION: "5.0"
+        CODE_SIGN_STYLE: Automatic
+        # Set DEVELOPMENT_TEAM to your *Personal Team* ID in Xcode > Signing & Capabilities (no paid program needed).
+        DEVELOPMENT_TEAM: ""
+        TARGETED_DEVICE_FAMILY: "1"

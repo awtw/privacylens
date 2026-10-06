@@ -2,12 +2,17 @@
   "name": "privacylens",
   "private": true,
   "type": "module",
-  "workspaces": ["packages/*", "apps/*"],
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
     "dev": "npm run dev -w @privacylens/web",
     "build": "npm run build -w @privacylens/web",
     "test": "vitest run",
-    "typecheck": "tsc -p packages/privacy-spec --noEmit && tsc -p apps/web --noEmit"
+    "typecheck": "tsc -p packages/privacy-spec --noEmit && tsc -p apps/web --noEmit",
+    "sync:fixtures": "cp packages/privacy-spec/fixtures/cases.json apps/ios/Sources/kit-check/Fixtures/cases.json",
+    "test:ios": "npm run sync:fixtures && swift run --package-path apps/ios kit-check"
   },
   "devDependencies": {
     "typescript": "^5.6.0",
